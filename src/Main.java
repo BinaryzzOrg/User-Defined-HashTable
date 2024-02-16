@@ -1,8 +1,9 @@
 import java.util.Scanner;
 
 public class Main {
-	// field variables
-	private static HashTable hashTable = new HashTable();
+	// === FIELD VARIABLES === //
+	private static int defaultSize = 15;
+	private static HashTable hashTable = new HashTable(setSize());
 
 	public static void main(String[] args) {
 		Menu();
@@ -38,22 +39,31 @@ public class Main {
 	 * MenuChoices method also handles miss inputs of the user and loops if it
 	 * detects one.
 	 */
+	//@formatter:off
 	public static void Menu() {
 		System.out.print(PrintMenuChoices());
 
-		switch (CheckUserInput(PrintMenuChoices())) {
+		switch (CheckUserInputMenu(PrintMenuChoices())) {
 		case 1: {// Search
-			hashTable.search();
+			
+			System.out.print(":: Enter the string to search \n UserInput%> ");
+			System.out.println(hashTable.search
+								(CheckUserInput
+									(printCustomError("string"))));
 			break;
 		}
 
 		case 2: {// Insert
-			hashTable.insert();
+			System.out.print("UserInput%> ");
+			hashTable.insert(CheckUserInput
+							(printCustomError("string")));
 			break;
 		}
 
 		case 3: {// Delete
-			hashTable.delete();
+			System.out.print("UserInput%> ");
+			//hashTable.delete(CheckUserInput
+			//					(printCustomError("string")));
 			break;
 		}
 		case 4: {// Display
@@ -76,6 +86,7 @@ public class Main {
 		}// end method
 
 		Menu();
+		//@formatter:on
 	}// end method
 
 	/*
@@ -83,23 +94,70 @@ public class Main {
 	 * integer. If the input is an integer, it is stored in the 'value' variable and
 	 * returns it. If the input is not an integer, an error message is displayed,
 	 * and the user is prompted to enter an integer value. The 'prompt' parameter is
-	 * used for different scenarios of printing needed for certain menus.
+	 * used for different scenarios of prin if (input == " ") { return defaultSize;
+	 * }else if () {
+	 * 
+	 * } ting needed for certain menus.
 	 */
-	public static int CheckUserInput(String prompt) {
-		Scanner sc = new Scanner(System.in);
+	static Scanner sc;
+
+	// for dealing with nums as input
+	public static int CheckUserInputMenu(String prompt) {
+		sc = new Scanner(System.in);
 
 		if (sc.hasNextInt()) {
 			int value = sc.nextInt();
 			return value;
 		} // end if
 
-		// @formatter:off
-			System.out.println("\n" +
-					"Warning: Input is not a string value. \n\n" +
-					"Notice: \033[3mPlease only enter string value\033[0m \n");
-			// @formatter:on
+		System.out.println(printCustomError("integer"));
+
+		System.out.print(prompt);
+		return CheckUserInputMenu(prompt);
+	}// end if
+
+	// for dealing with string as input
+	public static String CheckUserInput(String prompt) {
+		sc = new Scanner(System.in);
+
+		if (!sc.hasNextInt()) {
+			String input = sc.nextLine();
+			return input;
+		} // end if
+
+		System.out.println(printCustomError("string"));
 
 		System.out.print(prompt);
 		return CheckUserInput(prompt);
 	}// end if
+
+	public static int setSize() {
+		sc = new Scanner(System.in);
+		System.out.print(":: Change the default HashTable lengt of 15? [y/N]: ");
+		String input = sc.nextLine().toLowerCase();
+
+		switch (input) {
+		case "y": {
+			System.out.println("UserInput%> ");
+			return CheckUserInputMenu(printCustomError("integer"));
+		}
+		case "n": {
+			break;
+		}
+		default:
+			System.out.println(":: invalid input from CheckUserInput");
+			setSize();
+			break;
+		}
+		return defaultSize;
+	}// end method
+
+	public static String printCustomError(String type) {
+		// @formatter:off
+		return "\n" +
+			"Warning: Input is not a "+ type +" value. \n\n" +
+			"Notice: \033[3mPlease only enter "+ type +" value.\033[0m \n";
+		// @formatter:on
+	}// end method
+
 }// end method
