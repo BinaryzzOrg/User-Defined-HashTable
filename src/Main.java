@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 public class Main {
 	// === FIELD VARIABLES === //
+	static Scanner sc;
 	private static int defaultSize = 15;
 	private static HashTable hashTable = new HashTable(setSize());
 
@@ -15,7 +16,7 @@ public class Main {
 	 * first time. The method is also passed as a parameter to other methods that
 	 * use the 'prompt' String.
 	 */
-	public static String PrintMenuChoices() {
+	public static String printMenuChoices() {
 		String MenuChoicesAsString =
 		//@formatter:off
 								"\n" + 
@@ -41,29 +42,24 @@ public class Main {
 	 */
 	//@formatter:off
 	public static void Menu() {
-		System.out.print(PrintMenuChoices());
+		System.out.print(printMenuChoices());
 
-		switch (CheckUserInputMenu(PrintMenuChoices())) {
+		switch (checkUserInputMenu(printMenuChoices())) {
 		case 1: {// Search
-			
-			System.out.print(":: Enter the string to search \n UserInput%> ");
-			System.out.println(hashTable.search
-								(CheckUserInput
-									(printCustomError("string"))));
+			System.out.print("\n:: Enter the string to search. \nUserInput%> ");
+			System.out.println(hashTable.search(checkUserInput("\n:: Enter the string to search. \nUserInput%> ")));
 			break;
 		}
 
 		case 2: {// Insert
-			System.out.print("UserInput%> ");
-			hashTable.insert(CheckUserInput
-							(printCustomError("string")));
+			System.out.print("\n:: Enter the string to insert. \nUserInput%> ");
+			hashTable.insert(checkUserInput("\n:: Enter the string to insert. \nUserInput%> "));
 			break;
 		}
 
 		case 3: {// Delete
-			System.out.print("UserInput%> ");
-			//hashTable.delete(CheckUserInput
-			//					(printCustomError("string")));
+			System.out.print("\n:: Enter the string to delete. \nUserInput%> ");
+			//hashTable.delete(CheckUserInput("\n:: Enter the string to delete. \nUserInput%> "));
 			break;
 		}
 		case 4: {// Display
@@ -90,19 +86,14 @@ public class Main {
 	}// end method
 
 	/*
-	 * The CheckUserInput method scans the user's input and checks if it is an
+	 * The CheckUserInputMenu method scans the user's input and checks if it is an
 	 * integer. If the input is an integer, it is stored in the 'value' variable and
 	 * returns it. If the input is not an integer, an error message is displayed,
 	 * and the user is prompted to enter an integer value. The 'prompt' parameter is
-	 * used for different scenarios of prin if (input == " ") { return defaultSize;
-	 * }else if () {
-	 * 
-	 * } ting needed for certain menus.
+	 * used for different scenarios of printing
 	 */
-	static Scanner sc;
-
-	// for dealing with nums as input
-	public static int CheckUserInputMenu(String prompt) {
+	// TLDR - METHOD FOR DEALING WITH INTEGER INPUT
+	public static int checkUserInputMenu(String prompt) {
 		sc = new Scanner(System.in);
 
 		if (sc.hasNextInt()) {
@@ -113,11 +104,19 @@ public class Main {
 		System.out.println(printCustomError("integer"));
 
 		System.out.print(prompt);
-		return CheckUserInputMenu(prompt);
+		return checkUserInputMenu(prompt);
 	}// end if
 
-	// for dealing with string as input
-	public static String CheckUserInput(String prompt) {
+	/*
+	 * The CheckUserInput is an overload of CheckUserMenu method, This method scans
+	 * the user's input and checks if it is a string. If the input is a string, it
+	 * is stored in the 'input' variable and returns it. If the input is not a
+	 * string, an error message is displayed, and the user is prompted to enter a
+	 * string value. The 'prompt' parameter is used for different scenarios of
+	 * printing
+	 */
+	// TLDR - METHOD FOR DEALING WITH STRING INPUT
+	public static String checkUserInput(String prompt) {
 		sc = new Scanner(System.in);
 
 		if (!sc.hasNextInt()) {
@@ -128,9 +127,18 @@ public class Main {
 		System.out.println(printCustomError("string"));
 
 		System.out.print(prompt);
-		return CheckUserInput(prompt);
+		return checkUserInput(prompt);
 	}// end if
 
+	/*
+	 * The setSize is a menu method for setting up the initial size of the hashTable
+	 * array. It asks the user if they want to change the default size of 15. If the
+	 * user enters y/Y, the method will ask the user to input a new size and if the
+	 * user enters n/N, the method will break and returns the defaultSize variable
+	 * set to 15. Lastly, if the user tries to enter any other input than y/Y or
+	 * n/N, the method prints an error and calls itself again until the user gives a
+	 * correct input.
+	 */
 	public static int setSize() {
 		sc = new Scanner(System.in);
 		System.out.print(":: Change the default HashTable lengt of 15? [y/N]: ");
@@ -138,8 +146,8 @@ public class Main {
 
 		switch (input) {
 		case "y": {
-			System.out.println("UserInput%> ");
-			return CheckUserInputMenu(printCustomError("integer"));
+			System.out.print("UserInput%> ");
+			return checkUserInputMenu("UserInput%> ");
 		}
 		case "n": {
 			break;
@@ -152,6 +160,12 @@ public class Main {
 		return defaultSize;
 	}// end method
 
+	/*
+	 * The printCustomError is exclusively used by checkUserInput, and
+	 * checkUserInputMenu for printing their errors, but this method can by used by
+	 * other methods if needed. This method has a parameter called 'type' for
+	 * specify what data is needed to be inputed on a method that calls this.
+	 */
 	public static String printCustomError(String type) {
 		// @formatter:off
 		return "\n" +

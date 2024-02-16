@@ -20,7 +20,7 @@ public class HashTable {
 	public String search(String input) {
 
 		if (isTableEmpty()) {
-			return "Notice: Table is currently empty.";
+			return "\nNotice: Table is currently empty.";
 		} // end if
 
 		int hashKey = hashFunction(input);
