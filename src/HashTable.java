@@ -32,7 +32,7 @@ public class HashTable {
 			hashKey %= size;
 
 			if (input.equals(tableElement)) {
-				return input + " === ELEMENT FOUND === ";
+				return " === ELEMENT FOUND === \n" + input;
 			} // end if
 			counter++;
 
@@ -57,8 +57,36 @@ public class HashTable {
 		numberOfElements++;
 	}// end method
 
-	public void delete() {
+	public void delete(String input) {
+		int hashKey = hashFunction(input);
+		String tableValue = getHashTable()[hashKey];
+		int checkElements = 0;
 
+		if (tableValue == null) {
+
+			while (true) {
+				++hashKey;
+				hashKey %= size;
+				tableValue = getHashTable()[hashKey];
+
+				if (input.equals(tableValue)) {
+					hashTable[hashKey] = null;
+					numberOfElements--;
+					return;
+				} // end if
+				checkElements++;
+
+				if (checkElements == numberOfElements) {
+					System.out.println("\nNotice: Element not found.");
+					return;
+				} // end if
+			} // end while
+
+		} else if (tableValue != null) {
+			System.out.println("\nSuccess: " + input + " is deleted.");
+			hashTable[hashKey] = null;
+			return;
+		} // end if else
 	}// end method
 
 	public void display() {
