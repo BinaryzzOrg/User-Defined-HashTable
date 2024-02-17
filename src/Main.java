@@ -6,6 +6,7 @@ public class Main {
 	private static int defaultSize = 15;
 	private static HashTable hashTable = new HashTable(setSize());
 
+	// === MAIN METHOD === //
 	public static void main(String[] args) {
 		Menu();
 	}// end method
@@ -59,7 +60,7 @@ public class Main {
 
 		case 3: {// Delete
 			System.out.print("\n:: Enter the string to delete. \nUserInput%> ");
-			//hashTable.delete(CheckUserInput("\n:: Enter the string to delete. \nUserInput%> "));
+			hashTable.delete(checkUserInput("\n:: Enter the string to delete. \nUserInput%> "));
 			break;
 		}
 		case 4: {// Display
