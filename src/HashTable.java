@@ -1,4 +1,3 @@
-
 public class HashTable {
 	// === FIELD VARIABLES === //
 	private String[] hashTable;
@@ -39,7 +38,7 @@ public class HashTable {
 			hashKey %= size;
 
 			if (input.equals(tableElement)) {
-				return " === ELEMENT FOUND === \n" + input;
+				return " === ELEMENT FOUND === \n";
 			} // end if
 			counter++;
 
@@ -60,7 +59,7 @@ public class HashTable {
 	public void insert(String input) {
 
 		if (isTableFull()) {
-			System.out.println("Notice: HashTable is currently full.");
+			System.out.println("\nNotice: HashTable is currently full.");
 			return;
 		} // end if
 
@@ -73,44 +72,23 @@ public class HashTable {
 	/*
 	 * Also computes first the hashkey
 	 * ' Has a sets of conditions ' 
-	 * - isTableEmpty = checks if table is empty
-	 * - isSlotEmptyOnValue = checks if a specific slot is empty, 
-	 * further used to avoid NullPointerException Error when checking the element if its equal to the user input
+	 * - isSlotEmpty = checks if a specific slot is empty, 
+	 * further used to avoid NullPointerException Error and when checking the element if its equal to the user input
 	 * removes the value and displaying the result
 	 */
 	
 	public void delete(String input) {
 		int hashKey = hashFunction(input);
-		String tableValue = getHashTable()[hashKey];
-		int checkElements = 0;
-		
-		if (isTableEmpty()) { System.out.println("User trying to delete on an empty table!!\nGo first to \'INSERT\' operation") ;return; }
-		
-		if (isSlotEmptyOnValue(tableValue)) {
-
-			while (true) {
-				++hashKey;
-				hashKey %= size;
-				tableValue = getHashTable()[hashKey];
-
-				if (input.equals(tableValue)) {
-					hashTable[hashKey] = null;
-					numberOfElements--;
-					return;
-				} // end if
-				checkElements++; 	
-
-				if (checkElements == numberOfElements) {
-					System.out.println("\nNotice: Element not found.");
-					return;
-				} // end if
-			} // end while
-
-		} else if (!isSlotEmptyOnValue(tableValue)) {
-			System.out.println("\nSuccess: " + input + " is deleted.");
-			hashTable[hashKey] = null;
-			return;
-		} // end if else
+		for (int theIndex = 0; theIndex < hashTable.length; theIndex++) {
+			 int theProbingIndex = (hashKey + theIndex) % hashTable.length;
+			 if (!isSlotEmpty(theProbingIndex) && hashTable[theProbingIndex].equals(input)) {
+				 hashTable[theProbingIndex] = null; 
+				 System.out.println("\nSuccess: " + input + " is deleted.");
+				 numberOfElements--;
+				 return;
+			 }
+		}
+		System.out.println("\nNotice: Element not found!");
 	}// end method
 
 	/*
@@ -193,8 +171,8 @@ public class HashTable {
 		return numberOfElements == hashTable.length;
 	}
 	
-	private boolean isSlotEmptyOnValue(String theTableValue) {
-		return theTableValue == null;
+	public boolean isSlotEmpty(int theProbingIndex) {
+		return hashTable[theProbingIndex] == null;
 	}
 	
 	public boolean isTableEmpty() {

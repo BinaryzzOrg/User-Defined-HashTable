@@ -77,7 +77,7 @@ public class Main {
 			// @formatter:off
 			System.out.println("\n" +
 					"Warning: Input is not a valid Menu choice. \n" +
-					"Notice: \033[3mPlease enter only 1 to 5 as input\033[0m \n");
+					"\nNotice: \033[3mPlease enter only 1 to 5 as input\033[0m \n");
 			// @formatter:on
 			break;
 		}// end method
@@ -142,7 +142,7 @@ public class Main {
 	 */
 	public static int setSize() {
 		sc = new Scanner(System.in);
-		System.out.print(":: Change the default HashTable lengt of 15? [y/N]: ");
+		System.out.print(":: Change the default HashTable length of 15? [y/N]: ");
 		String input = sc.nextLine().toLowerCase();
 
 		switch (input) {
@@ -154,7 +154,7 @@ public class Main {
 			break;
 		}
 		default:
-			System.out.println(":: invalid input from CheckUserInput");
+			System.out.println(printCustomError("char"));
 			setSize();
 			break;
 		}
