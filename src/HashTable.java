@@ -24,28 +24,30 @@ public class HashTable {
 	
 	// === HASHTABLE OPERATIONS === //
 	public String search(String input) {
-
 		if (isTableEmpty()) {
 			return "\nNotice: Table is currently empty.";
 		} // end if
-
+		
 		int hashKey = hashFunction(input);
-		String tableElement = getHashTable()[hashKey];
-
+		
 		int counter = 0;
-		while (tableElement != null) {
-			++hashKey;
-			hashKey %= size;
-
+		while (true) {
+			String tableElement = getHashTable()[hashKey];
 			if (input.equals(tableElement)) {
 				return " === ELEMENT FOUND === \n";
 			} // end if
+			
+			++hashKey;
+			hashKey %= size;
 			counter++;
 
-			if (counter == numberOfElements) {
+			if (counter == size) {
 				break;
 			} // end if
 		} // end while
+
+		return " === ELEMENT NOT FOUND === ";
+	}// end method
 
 		return " === ELEMENT NOT FOUND === ";
 	}// end method
