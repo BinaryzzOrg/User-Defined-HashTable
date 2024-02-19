@@ -4,6 +4,7 @@ public class Main {
 	// === FIELD VARIABLES === //
 	static Scanner sc;
 	private static int defaultSize = 15;
+	private static int CustomSize = 0;
 	private static HashTable hashTable = new HashTable(setSize());
 
 	// === MAIN METHOD === //
@@ -46,7 +47,7 @@ public class Main {
 	public static void Menu() {
 		System.out.print(printMenuChoices());
 
-		switch (checkUserInputMenu(printMenuChoices())) {
+		switch (checkUserInputMenu(printMenuChoices(),false)) {
 		case 1: {// Search
 			System.out.print("\n:: Enter the string to search. \nUserInput%> ");
 			System.out.println(hashTable.search(checkUserInput("\n:: Enter the string to search. \nUserInput%> ")));
@@ -73,12 +74,11 @@ public class Main {
 			System.exit(0);
 			break;
 		}
-
 		default:
 			// @formatter:off
 			System.out.println("\n" +
 					"Warning: Input is not a valid Menu choice. \n" +
-					"Notice: \033[3mPlease enter only 1 to 5 as input\033[0m \n");
+					"\nNotice: \033[3mPlease enter only 1 to 5 as input\033[0m \n");
 			// @formatter:on
 			break;
 		}// end method
@@ -92,21 +92,34 @@ public class Main {
 	 * integer. If the input is an integer, it is stored in the 'value' variable and
 	 * returns it. If the input is not an integer, an error message is displayed,
 	 * and the user is prompted to enter an integer value. The 'prompt' parameter is
-	 * used for different scenarios of printing
+	 * used for different scenarios of printing, and the 'isNotAllowed' parameter is
+	 * for the setSize method. If 'isNotAllowed' is passed a 'true', then the
+	 * checkUserMenu method would not accept any value that is less than 15.
 	 */
 	// TLDR - METHOD FOR DEALING WITH INTEGER INPUT
-	public static int checkUserInputMenu(String prompt) {
+	public static int checkUserInputMenu(String prompt, boolean isNotAllowed) {
 		sc = new Scanner(System.in);
 
 		if (sc.hasNextInt()) {
 			int value = sc.nextInt();
+
+			if (isNotAllowed && value < 15) {
+			// @formatter:off
+			System.out.println("\n" +
+					"Warning: hashTable Length should NOT be less than 15. \n" +
+					"\nNotice: \033[3mPlease only enter values GREATER than 15. \033[0m \n");
+			// @formatter:on
+				System.out.print(prompt);
+				return checkUserInputMenu(prompt, isNotAllowed);
+			} // end if
+
 			return value;
 		} // end if
 
 		System.out.println(printCustomError("integer"));
 
 		System.out.print(prompt);
-		return checkUserInputMenu(prompt);
+		return checkUserInputMenu(prompt, isNotAllowed);
 	}// end if
 
 	/*
@@ -136,30 +149,33 @@ public class Main {
 	 * The setSize is a menu method for setting up the initial size of the hashTable
 	 * array. It asks the user if they want to change the default size of 15. If the
 	 * user enters y/Y, the method will ask the user to input a new size and if the
-	 * user enters n/N, the method will break and returns the defaultSize variable
-	 * set to 15. Lastly, if the user tries to enter any other input than y/Y or
-	 * n/N, the method prints an error and calls itself again until the user gives a
-	 * correct input.
+	 * user enters n/N, the method will return the defaultSize variable and break
+	 * Lastly, if the user tries to enter any other input than y/Y or n/N, the
+	 * method prints an error and calls itself again until the user gives a correct
+	 * input.
 	 */
 	public static int setSize() {
 		sc = new Scanner(System.in);
-		System.out.print(":: Change the default HashTable lengt of 15? [y/N]: ");
+		System.out.println("Notice: \033[3mThe hashTable can currently hold 15 elements.\033[0m");
+		System.out.print(":: Would you like to change the default HashTable length of 15? [y/N]: ");
 		String input = sc.nextLine().toLowerCase();
 
 		switch (input) {
 		case "y": {
-			System.out.print("UserInput%> ");
-			return checkUserInputMenu("UserInput%> ");
+			System.out.print("\n:: Enter a new hashTable length NOT less than 15. \nUserInput%> ");
+			CustomSize = checkUserInputMenu(":: Enter a new hashTable length NOT less than 15. \nUserInput%> ", true);
+			return CustomSize;
 		}
 		case "n": {
-			break;
+			return defaultSize;
 		}
 		default:
-			System.out.println(":: invalid input from CheckUserInput");
+			System.out.println(printCustomError("char"));
 			setSize();
 			break;
 		}
-		return defaultSize;
+
+		return CustomSize;
 	}// end method
 
 	/*
@@ -172,7 +188,7 @@ public class Main {
 		// @formatter:off
 		return "\n" +
 			"Warning: Input is not a "+ type +" value. \n\n" +
-			"Notice: \033[3mPlease only enter "+ type +" value.\033[0m \n";
+			"Notice: \033[3mPlease only enter a "+ type +" value.\033[0m \n";
 		// @formatter:on
 	}// end method
 

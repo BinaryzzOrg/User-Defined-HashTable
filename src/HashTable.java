@@ -1,4 +1,3 @@
-
 public class HashTable {
 	// === FIELD VARIABLES === //
 	private String[] hashTable;
@@ -25,25 +24,25 @@ public class HashTable {
 
 	// === HASHTABLE OPERATIONS === //
 	public String search(String input) {
-
 		if (isTableEmpty()) {
-			return "\nNotice: Table is currently empty.";
+			return "\nNotice: \033[3mTable is currently empty\033[0m.";
 		} // end if
 
 		int hashKey = hashFunction(input);
-		String tableElement = getHashTable()[hashKey];
 
 		int counter = 0;
-		while (tableElement != null) {
+		while (true) {
+
+			String tableElement = getHashTable()[hashKey];
+			if (input.equals(tableElement)) {
+				return " === ELEMENT FOUND === \n";
+			} // end if
+
 			++hashKey;
 			hashKey %= size;
-
-			if (input.equals(tableElement)) {
-				return " === ELEMENT FOUND === \n" + input;
-			} // end if
 			counter++;
 
-			if (counter == numberOfElements) {
+			if (counter == size) {
 				break;
 			} // end if
 		} // end while
@@ -52,11 +51,8 @@ public class HashTable {
 	}// end method
 
 	/*
-	 * Inserts a value to the table Gets the hash key computed from a hash function
-	 * Resolves collision through the use of linear probing Updates the number of
-	 * elements //Method return ung acceptable string should have different
-	 * 
-	 * conditionals based on the given manual test cases Adios!!
+	 * Method return ung acceptable string should have different conditionals based
+	 * on the given manual test cases Adios!!
 	 */
 
 	public String returnAcceptableString(String theUserStringValue) {
@@ -77,7 +73,7 @@ public class HashTable {
 	public void insert(String input) {
 		String theAcceptedStringValue = returnAcceptableString(input);
 		if (isTableFull()) {
-			System.out.println("Notice: HashTable is currently full.");
+			System.out.println("\nNotice: \033[3mHashTable is currently full\033[0m.");
 			return;
 		} // end if
 
@@ -132,13 +128,7 @@ public class HashTable {
 			hashTable[hashKey] = null;
 			return;
 		} // end if else
-	}// end method
-
-	/*
-	 * Display the table in tabular form conditions to determined whether a value is
-	 * a single digit or containing multiple digits format the display based on
-	 * returned value of the conditions
-	 */
+	} // end of method
 
 	public void display() {
 		System.out.print(setDesign('-', 23, true));
@@ -157,10 +147,10 @@ public class HashTable {
 				System.out.print("    " + hashTable[theIndex] + " ");
 
 			System.out.println();
-		}
+		} // end for
 		System.out.print(setDesign('-', 23, true));
 
-	}
+	} // end method
 
 	/*
 	 * Returns the HashKey converts the characters of the user-inputted string value
@@ -182,16 +172,18 @@ public class HashTable {
 	}// end method
 
 	/*
-	 * Resolves the collisions By adjusting to next slots until it's available
-	 * 'Incase if the adjustment starts in the middle indices or last it will crawl
-	 * to the left side of the table By getting the modulo of the pre-incremented
+	 * Resolves the collisions By adjusting to next slots until it's available 'In
+	 * case if the adjustment starts in the middle indices or last it will crawl to
+	 * the left side of the table By getting the modulo of the pre-incremented
 	 * key-index and the size which result to index 0 = return to start point
 	 */
+
 	public int linearProbing(int hashKey) {
 		while (getHashTable()[hashKey] != null) {
 			++hashKey;
 			hashKey %= size;
 		} // end while
+
 		return hashKey;
 	}// end method
 
@@ -200,6 +192,7 @@ public class HashTable {
 		for (int theIndex = 0; theIndex < theNumOfIteration; theIndex++) {
 			concat += theSymbol;
 		}
+
 		if (toHaveANewLine)
 			concat += "\n";
 		else
@@ -219,7 +212,11 @@ public class HashTable {
 
 	private boolean isSlotEmptyOnValue(String theTableValue) {
 		return theTableValue == null;
-	}
+	}// end method
+
+	public boolean isSlotEmpty(int theProbingIndex) {
+		return hashTable[theProbingIndex] == null;
+	}// end method
 
 	public boolean isTableEmpty() {
 		return numberOfElements == 0;
