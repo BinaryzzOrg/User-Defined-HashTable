@@ -177,20 +177,28 @@ public class Main {
 	}// end method
 	
 	
-	public static int closestPrime(int number) {
-		number /= .70;
-		if (isPrime(number))
-			return number;
-		for (int i = number; true; i++) {
-			if (isPrime(i))
-				return i;
+	/*
+	 *  reinitialize the number of elements to be divided by the common load factor which is .70
+	 *  if the stored number is a prime immediately return the stored number
+	 *  if the stored is not a prime execute the for loop with the starting index of stored number
+	 *  then check if the next number is a prime and continuously traverse until it becomes a prime number
+	 */
+	public static int closestPrime(int nOfElements) {
+		nOfElements /= .70;
+		if (isPrime(nOfElements))
+			return nOfElements;
+		for (int index = nOfElements; true; index++) {
+			if (isPrime(index))
+				return index;
 		}
 
 	}
 	
 	/*
-	 * 
-	 * 
+	 * Conditionals to validate if an odd number is divisible by 0
+	 * If True = return false since if any number greater than 1 and less than itself is not considered as prime number
+	 * number/2 = To lessen the iteration process
+	 * Incase the loop terminates it returns true which signify that it's indeed a prime number
 	 */
 	
 	public static boolean isPrime(int number) {
