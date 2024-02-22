@@ -154,34 +154,41 @@ public class Main {
 	 */
 	public static int setSize() {
 		sc = new Scanner(System.in);
-		System.out.println("Notice: \033[3mThe program must be able to store 15 String values \nComputing the temporary size by the load factor percentage...\nGetting the nearest prime...\nThe hashTable can now hold "+ defaultSize +" elements.\033[0m");
-		System.out.print(":: Would you like to change the default HashTable length? [y/N]: ");
+		System.out.println("Notice: \033[3mThe program must be able to store 15 String values. \n "
+				+ "Computing the temporary size by the load factor percentage...\n "
+				+ "Getting the nearest prime...\n The hashTable can now hold " + defaultSize + " elements.\033[0m");
+		System.out.print("\n:: Would you like to change the default HashTable length? [y/N]: ");
 		String input = sc.nextLine().toLowerCase();
 
 		switch (input) {
 		case "y": {
 			System.out.print("\n:: Resize the table to a length NOT less than " + defaultSize + ". \nUserInput%> ");
-			customSize = checkUserInputMenu(":: Resize the table to a length NOT less than " + defaultSize + ". \nUserInput%> ", true);
-			return (isPrime(customSize) ? customSize : closestPrime(customSize));
+			customSize = checkUserInputMenu(
+					":: Resize the table to a length NOT less than " + defaultSize + ". \nUserInput%> ", true);
+			customSize = (isPrime(customSize) ? customSize : closestPrime(customSize));
+			return customSize;
 		}
 		case "n": {
+			return defaultSize;
+		}
+		case "": {
 			return defaultSize;
 		}
 		default:
 			System.out.println(printCustomError("char"));
 			setSize();
 			break;
-		}
+		}// end switch
 
 		return customSize;
 	}// end method
-	
-	
+
 	/*
-	 *  reinitialize the number of elements to be divided by the common load factor which is .70
-	 *  if the stored number is a prime immediately return the stored number
-	 *  if the stored is not a prime execute the for loop with the starting index of stored number
-	 *  then check if the next number is a prime and continuously traverse until it becomes a prime number
+	 * reinitialize the number of elements to be divided by the common load factor
+	 * which is .70 if the stored number is a prime immediately return the stored
+	 * number if the stored is not a prime execute the for loop with the starting
+	 * index of stored number then check if the next number is a prime and
+	 * continuously traverse until it becomes a prime number
 	 */
 	public static int closestPrime(int nOfElements) {
 		nOfElements /= .70;
@@ -190,25 +197,26 @@ public class Main {
 		for (int index = nOfElements; true; index++) {
 			if (isPrime(index))
 				return index;
-		}
+		} // end for
+	}// end method
 
-	}
-	
 	/*
-	 * Conditionals to validate if an odd number is divisible by 0
-	 * If True = return false since if any number greater than 1 and less than itself is not considered as prime number
-	 * number/2 = To lessen the iteration process
-	 * Incase the loop terminates it returns true which signify that it's indeed a prime number
+	 * Conditionals to validate if an odd number is divisible by 0 If True = return
+	 * false since if any number greater than 1 and less than itself is not
+	 * considered as prime number number/2 = To lessen the iteration process Incase
+	 * the loop terminates it returns true which signify that it's indeed a prime
+	 * number
 	 */
-	
+
 	public static boolean isPrime(int number) {
-		
-		for(int i = 2; i < number/2; i++) {
-			if(number % i == 0) return false;
-		}
+
+		for (int i = 2; i < number / 2; i++) {
+			if (number % i == 0)
+				return false;
+		} // end for
 		return true;
-	}
-	
+	}// end method
+
 	/*
 	 * The printCustomError is exclusively used by checkUserInput, and
 	 * checkUserInputMenu for printing their errors, but this method can by used by
@@ -222,5 +230,4 @@ public class Main {
 			"Notice: \033[3mPlease only enter a "+ type +" value.\033[0m \n";
 		// @formatter:on
 	}// end method
-
 }// end method

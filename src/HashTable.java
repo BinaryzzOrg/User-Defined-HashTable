@@ -75,6 +75,12 @@ public class HashTable {
 	 * user input removes the value and displaying the result
 	 */
 	public void delete(String input) {
+
+		if (isTableEmpty()) {
+			System.out.println("\nNotice: \033[3mTable is currently empty\033[0m.");
+			return;
+		} // end if
+
 		int hashKey = hashFunction(input);
 		for (int theIndex = 0; theIndex < hashTable.length; theIndex++) {
 			int theProbingIndex = (hashKey + theIndex) % hashTable.length;
@@ -83,8 +89,9 @@ public class HashTable {
 				System.out.println("\nSuccess: " + input + " is deleted.");
 				numberOfElements--;
 				return;
-			}
-		}
+			} // end if
+		} // end for
+
 		System.out.println("\nNotice: \033[3mElement not found.\033[0m");
 	}// end method
 
