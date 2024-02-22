@@ -3,8 +3,8 @@ import java.util.Scanner;
 public class Main {
 	// === FIELD VARIABLES === //
 	static Scanner sc;
-	private static int defaultSize = 15;
-	private static int CustomSize = 0;
+	private static int defaultSize = closestPrime(15);
+	private static int customSize = 0;
 	private static HashTable hashTable = new HashTable(setSize());
 
 	// === MAIN METHOD === //
@@ -102,16 +102,15 @@ public class Main {
 		if (sc.hasNextInt()) {
 			int value = sc.nextInt();
 
-			if (isNotAllowed && value < 15) {
+			if (isNotAllowed && value < defaultSize) {
 			// @formatter:off
 			System.out.println("\n" +
-					"Warning: hashTable Length should NOT be less than 15. \n" +
-					"\nNotice: \033[3mPlease only enter values GREATER than 15. \033[0m \n");
+					"Warning: hashTable Length should NOT be less than " + defaultSize + ". \n" +
+					"\nNotice: \033[3mPlease only enter values GREATER than " +  defaultSize + ". \033[0m \n");
 			// @formatter:on
 				System.out.print(prompt);
 				return checkUserInputMenu(prompt, isNotAllowed);
-			} // end if
-
+			}
 			return value;
 		} // end if
 
@@ -155,15 +154,15 @@ public class Main {
 	 */
 	public static int setSize() {
 		sc = new Scanner(System.in);
-		System.out.println("Notice: \033[3mThe hashTable can currently hold 15 elements.\033[0m");
-		System.out.print(":: Would you like to change the default HashTable length of 15? [y/N]: ");
+		System.out.println("Notice: \033[3mThe program must be able to store 15 String values \nComputing the temporary size by the load factor percentage...\nGetting the nearest prime...\nThe hashTable can now hold "+ defaultSize +" elements.\033[0m");
+		System.out.print(":: Would you like to change the default HashTable length? [y/N]: ");
 		String input = sc.nextLine().toLowerCase();
 
 		switch (input) {
 		case "y": {
-			System.out.print("\n:: Enter a new hashTable length NOT less than 15. \nUserInput%> ");
-			CustomSize = checkUserInputMenu(":: Enter a new hashTable length NOT less than 15. \nUserInput%> ", true);
-			return CustomSize;
+			System.out.print("\n:: Resize the table to a length NOT less than " + defaultSize + ". \nUserInput%> ");
+			customSize = checkUserInputMenu(":: Resize the table to a length NOT less than " + defaultSize + ". \nUserInput%> ", true);
+			return (isPrime(customSize) ? customSize : closestPrime(customSize));
 		}
 		case "n": {
 			return defaultSize;
@@ -174,9 +173,42 @@ public class Main {
 			break;
 		}
 
-		return CustomSize;
+		return customSize;
 	}// end method
+	
+	
+	/*
+	 *  reinitialize the number of elements to be divided by the common load factor which is .70
+	 *  if the stored number is a prime immediately return the stored number
+	 *  if the stored is not a prime execute the for loop with the starting index of stored number
+	 *  then check if the next number is a prime and continuously traverse until it becomes a prime number
+	 */
+	public static int closestPrime(int nOfElements) {
+		nOfElements /= .70;
+		if (isPrime(nOfElements))
+			return nOfElements;
+		for (int index = nOfElements; true; index++) {
+			if (isPrime(index))
+				return index;
+		}
 
+	}
+	
+	/*
+	 * Conditionals to validate if an odd number is divisible by 0
+	 * If True = return false since if any number greater than 1 and less than itself is not considered as prime number
+	 * number/2 = To lessen the iteration process
+	 * Incase the loop terminates it returns true which signify that it's indeed a prime number
+	 */
+	
+	public static boolean isPrime(int number) {
+		
+		for(int i = 2; i < number/2; i++) {
+			if(number % i == 0) return false;
+		}
+		return true;
+	}
+	
 	/*
 	 * The printCustomError is exclusively used by checkUserInput, and
 	 * checkUserInputMenu for printing their errors, but this method can by used by
