@@ -154,7 +154,7 @@ public class Main {
 	 */
 	public static int setSize() {
 		sc = new Scanner(System.in);
-		System.out.println("Notice: \033[3mThe program must be able to store 15 String values \n "
+		System.out.println("Notice: \033[3mThe program must be able to store 15 String values. \n "
 				+ "Computing the temporary size by the load factor percentage...\n "
 				+ "Getting the nearest prime...\n The hashTable can now hold " + defaultSize + " elements.\033[0m");
 		System.out.print("\n:: Would you like to change the default HashTable length? [y/N]: ");
